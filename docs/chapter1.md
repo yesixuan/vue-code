@@ -1,4 +1,4 @@
-### 第一张
+### 第一章
 
 ```js
 function downloadImage(src, name) {
