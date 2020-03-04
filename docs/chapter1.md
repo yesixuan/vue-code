@@ -1,6 +1,6 @@
 ### js
 
-```js
+```js {3,5,6}
 function downloadImage(src, name) {
   const image = new Image();
   // 解决跨域 canvas 污染问题
@@ -40,6 +40,7 @@ const ha: Ha = {
 const App = () => <>
   <Header props={{ name: 'Vic' }} />
 </Header>
+</>
 ```
 
 ### vue
