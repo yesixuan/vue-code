@@ -1,6 +1,4 @@
-## VUE-CODE
-
-### js
+### 博客
 
 ```js {3,5,6}
 function downloadImage(src, name) {
@@ -41,6 +39,7 @@ const ha: Ha = {
 ```jsx
 const App = () => <>
   <Header props={{ name: 'Vic' }} />
+</Header>
 </>
 ```
 

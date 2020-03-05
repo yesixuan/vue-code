@@ -1,4 +1,4 @@
-### js
+### 博客 test
 
 ```js {3,5,6}
 function downloadImage(src, name) {
