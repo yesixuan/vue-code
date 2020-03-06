@@ -2,8 +2,8 @@ const themeConfig = require('./configs/theme/')
 
 module.exports = {
   base: '/vue-code/',
-  title: 'vue-next code',
-  description: 'vue-next code',
+  title: 'vue-next analysis',
+  description: 'vue-next analysis',
   markdown: {
     lineNumbers: true // 展示行号
   },

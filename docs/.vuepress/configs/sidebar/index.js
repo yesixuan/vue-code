@@ -1,11 +1,22 @@
 module.exports = {
   'zh': Object.assign({}, {
-    '/views/vue-next/': [{
-        title: '基础',
+    '/views/vue-next/': [
+      {
+        title: '响应式',
         collapsable: false,
         children: [
           '',
-          'test',
+          'reactive',
+          'handler',
+          'effect',
+        ]
+      },
+      {
+        title: '编译',
+        collapsable: false,
+        children: [
+          '',
+          // 'reactive',
         ]
       },
     ],
@@ -19,21 +30,32 @@ module.exports = {
     }]
   }),
   'en': Object.assign({}, {
-    '/en/views/vue-next/': [{
-        title: 'Basic',
+    '/en/views/vue-next/': [
+      {
+        title: 'reactivity',
         collapsable: false,
         children: [
           '',
-          'test',
+          'reactive',
+          'handler',
+          'effect',
+        ]
+      },
+      {
+        title: 'compile',
+        collapsable: false,
+        children: [
+          '',
+          // 'reactive',
         ]
       },
     ],
-    '/en/views/plugins/': [{
-      title: 'Plugins',
+    '/en/categories/blog/': [{
+      title: 'Blog',
       collapsable: true,
       children: [
         '',
-        'test',
+        'reactive',
       ]
     }]
   })
