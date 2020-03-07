@@ -18,7 +18,7 @@ obj.foo++
 
 ## effect 函数
 
-主要做两件事：1. 包装 fn 生成 Effect；2. 调用 Effect 的 run 方法  
+主要做两件事：1. 包装 fn 生成 Effect；2. 调用 Effect 的 run 方法
 
 ```ts {10,13}
 function effect<T = any>(
@@ -65,9 +65,9 @@ function createReactiveEffect<T = any>(
 
 ## run
 
-1. 只有当 `effect` 中调用的 `fn` 才会触发依赖追踪（手动调用 `effect` 返回的函数以及 `setter` 触发的调用都不进行依赖收集）  
-2. 保存 `effect` `引用（track` 是需要用到）  
-3. 调用 `fn` 触发 `getter`  
+1. 只有当 `effect` 中调用的 `fn` 才会触发依赖追踪（手动调用 `effect` 返回的函数以及 `setter` 触发的调用都不进行依赖收集）
+2. 保存 `effect` `引用（track` 是需要用到）
+3. 调用 `fn` 触发 `getter`
 
 ```ts {16,18}
 function run(effect: ReactiveEffect, fn: Function, args: unknown[]): unknown {
@@ -129,6 +129,132 @@ function track(target: object, type: TrackOpTypes, key: unknown) {
         key
       })
     }
+  }
+}
+```
+
+## 响应式数据改变后，通知 effect
+
+[setter 解析](./handler.md#createSetter)
+
+## trigger
+
+1. 根据 `target` 从 `targetMap` 中获取 `depsMap`
+2. 根据 `key` 从 `depsMap` 中得到 `effects`
+3. 将 `effects` 分发到内部的 `effects` 和 `computedRunners` 中
+4. 遍历调用内部 `effects` 和 `computedRunners` 中的 `effect`
+
+```ts
+export function trigger(
+  target: object,
+  type: TriggerOpTypes,
+  key?: unknown,
+  newValue?: unknown,
+  oldValue?: unknown,
+  oldTarget?: Map<unknown, unknown> | Set<unknown>
+) {
+  const depsMap = targetMap.get(target)
+  if (depsMap === void 0) {
+    // never been tracked
+    return
+  }
+  const effects = new Set<ReactiveEffect>()
+  const computedRunners = new Set<ReactiveEffect>()
+  if (type === TriggerOpTypes.CLEAR) {
+    // collection being cleared
+    // trigger all effects for target
+    // Map 对象是由 forEach 方法的 map.forEach((value, key, map) => { ... })
+    depsMap.forEach(dep => {
+      addRunners(effects, computedRunners, dep)
+    })
+  } else if (key === 'length' && isArray(target)) {
+    depsMap.forEach((dep, key) => {
+      if (key === 'length' || key >= (newValue as number)) {
+        addRunners(effects, computedRunners, dep)
+      }
+    })
+  } else {
+    // schedule runs for SET | ADD | DELETE
+    if (key !== void 0) {
+      addRunners(effects, computedRunners, depsMap.get(key))
+    }
+    // also run for iteration key on ADD | DELETE | Map.SET
+    if (
+      type === TriggerOpTypes.ADD ||
+      type === TriggerOpTypes.DELETE ||
+      (type === TriggerOpTypes.SET && target instanceof Map)
+    ) {
+      const iterationKey = isArray(target) ? 'length' : ITERATE_KEY
+      addRunners(effects, computedRunners, depsMap.get(iterationKey))
+    }
+  }
+  const run = (effect: ReactiveEffect) => {
+    scheduleRun(
+      effect,
+      target,
+      type,
+      key,
+      __DEV__
+        ? {
+            newValue,
+            oldValue,
+            oldTarget
+          }
+        : undefined
+    )
+  }
+  // Important: computed effects must be run first so that computed getters
+  // can be invalidated before any normal effects that depend on them are run.
+  computedRunners.forEach(run)
+  effects.forEach(run)
+}
+```
+
+### addRunners
+
+一个在 `effect` 中使用的对象可能既是响应式对象，又是某计算属性依赖的对象。
+此时要将这二者对应的 `effect` 区分开来（触发时，先触发计算 `effect`）
+
+```ts
+function addRunners(
+  effects: Set<ReactiveEffect>,
+  computedRunners: Set<ReactiveEffect>,
+  effectsToAdd: Set<ReactiveEffect> | undefined
+) {
+  if (effectsToAdd !== void 0) {
+    effectsToAdd.forEach(effect => {
+      if (effect !== activeEffect) {
+        if (effect.options.computed) {
+          computedRunners.add(effect)
+        } else {
+          effects.add(effect)
+        }
+      } else {
+        // the effect mutated its own dependency during its execution.
+        // this can be caused by operations like foo.value++
+        // do not trigger or we end in an infinite loop
+      }
+    })
+  }
+}
+```
+
+## scheduleRun
+
+最终调用 `effect` 的逻辑
+
+```ts
+function scheduleRun(
+  effect: ReactiveEffect,
+  target: object,
+  type: TriggerOpTypes,
+  key: unknown,
+  extraInfo?: DebuggerEventExtraInfo
+) {
+  if (effect.options.scheduler !== void 0) {
+    effect.options.scheduler(effect)
+  } else {
+    effect()
   }
 }
 ```

@@ -7,12 +7,12 @@ module.exports = {
   // 自动形成侧边导航
   sidebar: 'auto',
   // 侧边栏深度
-  sidebarDepth: 2,
+  sidebarDepth: 1,
   // 最后更新时间
   lastUpdated: 'Last Updated', // string | boolean
   // 作者
   author: 'Vic',
-  authorAvatar: '/head.png',
+  // authorAvatar: '/head.png',
   // 备案号
   // record: '京ICP备17067634号-1',
   // 项目开始时间
