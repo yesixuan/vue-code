@@ -9,7 +9,7 @@ module.exports = {
   // 侧边栏深度
   sidebarDepth: 1,
   // 最后更新时间
-  lastUpdated: 'Last Updated', // string | boolean
+  lastUpdated: '上次更新', // string | boolean
   // 作者
   author: 'Vic',
   // authorAvatar: '/head.png',
@@ -17,13 +17,6 @@ module.exports = {
   // record: '京ICP备17067634号-1',
   // 项目开始时间
   startYear: '2020',
-  algolia: {
-    apiKey: '97357e58cac743c6de62036cb152f18b',
-    indexName: 'vue-code'
-    // inputSelector: '### REPLACE ME ####',
-    // algoliaOptions: { 'facetFilters': ["lang:$LANG"] },
-    // debug: false // Set debug to true if you want to inspect the dropdown
-  },
   // valine 设置
   // valineConfig: {
   //   appId: 'jvc9s4BkJYQNOcpsbVTPMePe-gzGzoHsz',
@@ -44,7 +37,7 @@ module.exports = {
   // // 假如文档不是放在仓库的根目录下：
   docsDir: 'docs',
   // // 假如文档放在一个特定的分支下：
-  docsBranch: 'gh-pages-source',
+  docsBranch: 'master',
   // // 默认是 false, 设置为 true 来启用
   editLinks: true
 }
