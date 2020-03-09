@@ -38,4 +38,52 @@ module.exports = {
   //   //   }
   //   // }
   // }
+  configureWebpack: {
+    resolve: {
+      alias: {
+        '@img': './images'
+      }
+    }
+  },
+  plugins: [
+    [
+      '@vuepress/active-header-links',
+      {
+        sidebarLinkSelector: '.sidebar-link',
+        headerAnchorSelector: '.header-anchor'
+      }
+    ],
+    [
+      '@vuepress/medium-zoom',
+      {
+        selector: 'img',
+        options: {
+          margin: 16
+        }
+      }
+    ],
+    ['@vuepress/nprogress'],
+    [
+      '@vuepress/pwa',
+      {
+        serviceWorker: true,
+        updatePopup: {
+          message: '发现新内容可用',
+          buttonText: '刷新'
+        }
+      }
+    ],
+    [
+      'vuepress-plugin-container',
+      {
+        type: 'myDetails',
+        before: info =>
+          `<details class="custom-block details">${
+            info ? `<summary>${info}</summary>` : ''
+          }\n`,
+        after: () => '</details>\n',
+        defaultTitle: '展开更多'
+      }
+    ]
+  ]
 };

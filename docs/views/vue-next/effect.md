@@ -210,8 +210,7 @@ export function trigger(
 }
 ```
 
-### addRunners
-
+::: myDetails 查看addRunners函数细节
 一个在 `effect` 中使用的对象可能既是响应式对象，又是某计算属性依赖的对象。
 此时要将这二者对应的 `effect` 区分开来（触发时，先触发计算 `effect`）
 
@@ -238,6 +237,7 @@ function addRunners(
   }
 }
 ```
+:::
 
 ## scheduleRun
 
