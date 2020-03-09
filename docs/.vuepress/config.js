@@ -7,7 +7,8 @@ module.exports = {
   markdown: {
     lineNumbers: true // 展示行号
   },
-  theme: 'reco',
+  // theme: 'reco',
+  theme: 'antdocs',
   themeConfig,
   // themeConfig: {
   //   // vssueConfig: {
