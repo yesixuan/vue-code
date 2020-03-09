@@ -1,0 +1,20 @@
+{
+  "name": "源码学习",
+  "short_name": "vic",
+  "icons": [
+    {
+      "src": "/time.jpg",
+      "sizes": "192x192",
+      "type": "image/jpg"
+    },
+    {
+      "src": "/time.jpg",
+      "sizes": "512x512",
+      "type": "image/jpg"
+    }
+  ],
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#fff",
+  "theme_color": "#42b983"
+}
